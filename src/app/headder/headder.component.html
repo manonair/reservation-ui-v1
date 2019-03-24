@@ -1,0 +1,28 @@
+<div>
+<header class="header">
+    <caption >Reservation System</caption>
+    <div  >
+      <nav>
+        <a routerLink="/">Home</a> |   <a routerLink="/">About</a>  | <button   class="btn btn-danger my-2 my-sm-0" (click)="onLogout()" >Logout</button>
+      </nav>
+
+    </div>
+    
+
+   <!--  <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" routerLink="/">Home</button>
+        <button type="button" class="btn btn-secondary" routerLink="/">About</button>
+        <button type="button" class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">Logout</button>
+      </div> -->
+
+  </header>
+</div>
+  <div class="card m-4" style="width:18rem" *ngIf="userDetails">
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Username : </strong>{{userDetails.username}}</li>
+        <li class="list-group-item"><strong>AccountExpired : </strong>{{userDetails.accountExpired}}</li>
+        <li class="list-group-item"><strong>Enabled : </strong>{{userDetails.enabled}}</li>
+    
+      </ul>
+    </div>
+ 

@@ -1,0 +1,16 @@
+<div>
+    <ul>
+      <li class="far fa-trash-alt fa-lg text-danger">
+          <span class="badge"> 
+            <input type="checkbox"/>
+          </span>
+          <span>{{reservation.restaurantName}} </span>
+          <span>{{reservation.tableType}} </span>
+          <span>{{reservation.tableDesc}}  </span>
+          <span>{{reservation.status}} </span>
+          <span>{{reservation.bookingId}}</span>
+          <br>
+    <button class="del" (click)="onDelete(reservation)">X</button>
+      </li>
+    </ul>
+  </div>

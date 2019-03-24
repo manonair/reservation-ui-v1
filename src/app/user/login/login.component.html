@@ -1,0 +1,36 @@
+<div *ngIf="isLoginError" class="red-text center error-message">
+  <i class="material-icons">error</i> Incorrect username or password
+</div>
+ 
+<form #form='ngForm' class="col s12 white" autocomplete="off" (submit)="onSubmit(form)">
+  <div class="row">
+      <div class="input-field col s12"> 
+          <i class="material-icons prefix">account_circle</i>
+          <input class="form-control" #username="ngModel" name="username" [(ngModel)]="formModel.username" required>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="input-field col s12">
+          <i class="material-icons prefix">vpn_key</i>
+    <input type="password" class="form-control" #password="ngModel" name="password" [(ngModel)]="formModel.password" required>
+  </div>
+</div>
+  <div class="row">
+  <input type="hidden" name ="grant_type"  [(ngModel)]="formModel.grant_type"  >
+      <input type="hidden" name ="client_id"  [(ngModel)]="formModel.client_id"  >
+  </div>
+  
+  
+ 
+
+  <div class="row">
+      <div class="input-field col s12">
+          <button type="submit" class="btn btn-lg btn-block" [disabled]="form.invalid">Login</button>
+      </div>
+    </div>
+
+</form>
+
+
+ 

@@ -1,0 +1,53 @@
+<!-- <div class="row" *ngIf="reservations">
+        <div class="col s12 m7">
+            <div class="card">
+                <app-reservation-item  *ngFor = "let reservation of reservations" 
+                [class.selected]="reservation === selectedReservation"  
+                [reservation]="reservation" 
+                (deleteReservation)="deleteReservation($event)" 
+                (click)="editReservation(reservation)" 
+                >
+                </app-reservation-item>
+    </div>
+    </div>
+    </div>
+  -->
+
+<div>
+  <table class="table table-hover table-striped">
+    <caption>List of Reservations</caption>
+    <thead class="thead-light" >
+      <tr>
+      <th>#Order No.</th>
+      <th>Hotel Name</th>
+      <th>Table </th>
+      <th>Capacity</th>
+      <th>Table Type</th>
+      <th>Reservateion Start</th>
+      <th>Reservateion End</th>
+      <th>
+        <a class="btn btn-outline-success" routerLink="/home"><i class="fa fa-plus-square"></i> New Booking</a>
+      </th>
+    </tr>
+    </thead>
+ 
+      <tbody  *ngIf="reservations">
+        <tr *ngFor="let reservation of reservations">
+          <th scope="row" (click)="editReservation(reservation)">{{reservation.bookingId}}</th>
+          <td (click)="editReservation(reservation)">{{reservation.restaurantName}}</td>
+          <td (click)="editReservation(reservation)">{{reservation.tableDesc}}</td>
+          <td (click)="editReservation(reservation)">{{reservation.status}}</td>
+          <td (click)="editReservation(reservation)">{{reservation.tableType}}</td>
+          <td (click)="editReservation(reservation)">{{reservation.bookingStart}}</td>
+          <td (click)="editReservation(reservation)">{{reservation.bookingEnd}}</td>
+          <td>
+            <a class="btn text-danger" (click)="deleteReservation(reservation)">X<i class="fa fa-trash fa-lg"></i></a>
+          </td>
+        </tr>
+      </tbody>
+     
+  </table>
+</div>
+<div *ngIf="selectedReservation">
+  <app-add-reservation [reservation]="selectedReservation"></app-add-reservation>
+</div>
