@@ -6,6 +6,7 @@ import { isDate } from '@angular/common/src/i18n/format_date';
 import { isNull } from 'util';
 import { DateAdapter } from '@angular/material';
 import { getLocaleDateFormat, FormatWidth } from '@angular/common';
+import { Router } from '@angular/router';
 
 export interface BookingStatus {
   value: string;
@@ -18,14 +19,7 @@ export interface BookingStatus {
   styleUrls: ['./add-reservation.component.css']
 })
 export class AddReservationComponent implements OnInit {
-  
-  
-  
-  
-  
-  //@Output() addReservation :EventEmitter<any> =new EventEmitter();
-  
-  //private reservationService: ReservationService;
+ 
   @Input() reservation: Reservation;
   
   user:UserInfo ;
@@ -36,38 +30,24 @@ export class AddReservationComponent implements OnInit {
     {value: 'H', viewValue: 'On Hold'},
     {value: 'B', viewValue: 'BOOKED'}
   ];
-  constructor(private reservationService : ReservationService) { }
+  constructor(private reservationService : ReservationService, private router: Router) { }
 
   ngOnInit() {
    
   }
-
  
-
-
-  /* onEdit(reservation:Reservation ){
-    console.log("addReservation");
-    this.addReservation.emit(reservation)
-  } */
-
   onSubmit(){
     this.user =  JSON.parse (localStorage.getItem('userinfo'));
-     
-   // new Date(this.reservation.bookingStart);
-    //console.log( this.reservation.bookingStart  );
-    
-    this.reservation.userId= this.user.id;
-    /* var normalizedValue  = isNull(this.reservation.bookingStart) ? '' : (isDate(this.reservation.bookingStart) ? this.reservation.bookingStart.toLocaleDateString('yyyy-mm-dd hh:ii') : '' );
-    this.reservation.bookingStart=new Date( normalizedValue);
-    normalizedValue  = isNull(this.reservation.bookingEnd) ? '' : (isDate(this.reservation.bookingEnd) ? this.reservation.bookingEnd.toLocaleDateString('yyyy-mm-dd hh:ii') : '' );
-    this.reservation.bookingEnd=new Date(normalizedValue); */
+  this.reservation.userId= this.user.id;
+  
     const outParam:Reservation = this.reservation;
     
   this.reservationService.addReservation(outParam)
-  .subscribe();
+  .subscribe( );
+  this.reservation=null;
   console.log( 'Completed onSubmit');
-     
-  }
+  this.router.navigate(['home']);
+     }
 
 
   selected(){

@@ -4,6 +4,7 @@ import { ReservationService } from '../service/reservation.service';
 import { EventEmitter } from 'protractor';
 import { isNull, isDate } from 'util';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reservations',
@@ -15,14 +16,15 @@ export class ReservationsComponent implements OnInit {
   reservations: Reservation[];
   selectedReservation: Reservation;
 
+   
 
   @Input() reservation:Reservation;
  
-  constructor(private reservationService : ReservationService) { }
+  constructor(private reservationService : ReservationService, private router: Router) { }
 
   ngOnInit() {
-
-    this.reservationService.getReservationsByUser().subscribe(reservations=>{
+  this.reservationService.getReservationsByUser().subscribe(reservations=>{
+    
       this.reservations=reservations;
     });
 
@@ -30,23 +32,41 @@ export class ReservationsComponent implements OnInit {
 
   deleteReservation(reservation:Reservation){
     console.log('Delete Reservation !');
-    this.reservations.filter(t=>t.tableReservationId!=reservation.tableReservationId);
-    this.reservationService.deleteReservation(reservation).subscribe();
+    this.reservationService.deleteReservation(reservation).subscribe(
+      status =>{
+        if(status){
+            this.reservations = this.reservations.filter(rs => rs.tableReservationId !== reservation.tableReservationId);
+          }
+        }
+      );
+      }
+
+getAvailableTables(){
+    console.log('Get Available Tables to Book !');
+     this.reservationService.getAvailableTables().subscribe(reservations=>{
+
+      this.reservations=reservations;
+    });
+   
   }
 
- /*  addReservation(reservation:Reservation){
+
+
+  addReservation(reservation:Reservation){
     console.log('Add  Reservation Service CAll  !');
     this.reservationService.addReservation(reservation)
     .subscribe(
       reservation=>this.reservations.push(reservation)
-          );
-  } */
+      );
+      this.selectedReservation=null;
+      this.router.navigate(['home']);
+  }
 
   editReservation(reservation:Reservation){
-    console.log('Edit Reservation ! @ Add Page');
+    console.log('Edit Reservation ! @ Edit Page');
     reservation.bookingStart = isNull(reservation.bookingStart) ? new Date() : (isDate(reservation.bookingStart) ? moment(Number(reservation.bookingStart)).toDate() : new Date() );
      reservation.bookingEnd  = isNull(reservation.bookingEnd) ? new Date() : (isDate(reservation.bookingEnd) ? moment(Number(reservation.bookingEnd)).toDate() : new Date() );
-       
+      
     this.selectedReservation=reservation;
  
   }
