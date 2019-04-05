@@ -1,4 +1,4 @@
-import { Component, OnInit , EventEmitter, Output, Input} from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Reservation } from 'src/app/model/Reservation';
 import { ReservationService } from '../service/reservation.service';
 import { UserInfo } from '../auth/UserInfo';
@@ -19,41 +19,39 @@ export interface BookingStatus {
   styleUrls: ['./add-reservation.component.css']
 })
 export class AddReservationComponent implements OnInit {
- 
+
   @Input() reservation: Reservation;
   
-  user:UserInfo ;
+  successMessage:string;
+  
+  user: UserInfo;
   selectedstatus: string;
   bookingStatuses: BookingStatus[] = [
-    {value: 'A', viewValue: 'Active'},
-    {value: 'C', viewValue: 'Cancel'},
-    {value: 'H', viewValue: 'On Hold'},
-    {value: 'B', viewValue: 'BOOKED'}
+    { value: 'A', viewValue: 'Active' },
+    { value: 'C', viewValue: 'Cancel' },
+    { value: 'H', viewValue: 'On Hold' },
+    { value: 'B', viewValue: 'BOOKED' }
   ];
-  constructor(private reservationService : ReservationService, private router: Router) { }
+  constructor(private reservationService: ReservationService, private router: Router) { }
 
   ngOnInit() {
-   
   }
- 
-  onSubmit(){
-    this.user =  JSON.parse (localStorage.getItem('userinfo'));
-  this.reservation.userId= this.user.id;
-  
-    const outParam:Reservation = this.reservation;
-    
-  this.reservationService.addReservation(outParam)
-  .subscribe( );
-  this.reservation=null;
-  console.log( 'Completed onSubmit');
-  this.router.navigate(['home']);
-     }
 
+  onSubmit() {
+    if (confirm('Are you sure you want to Update details?')) {
+      this.user = JSON.parse(localStorage.getItem('userinfo'));
+      this.reservation.userId = this.user.id;
+      const outParam: Reservation = this.reservation;
+      this.reservationService.addReservation(outParam)
+        .subscribe();
+      this.reservation = null;
+      console.log('Completed onSubmit');
 
-  selected(){
+    }
+   // this.router.navigate(['/']);
+  }
+
+  selected() {
     console.log(this.selectedstatus)
   }
-
-
-
 }

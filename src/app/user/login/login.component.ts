@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   formModel = {
     username: '',
     password: '',
-    client_id:'spring-security-oauth2-read-write-client',
+    client_id:'oauth2-read-write-client',
     grant_type:'password'
 
   }

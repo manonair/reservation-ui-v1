@@ -1,5 +1,5 @@
 <div>
-  <table class="table table-hover table-striped">
+  <table class="table table-hover table-striped" >
     <caption>List of Reservations</caption>
     <thead class="thead-light" >
       <tr>
@@ -24,8 +24,9 @@
           <td (click)="editReservation(reservation)">{{reservation.tableDesc}}</td>
           <td (click)="editReservation(reservation)">{{reservation.status}}</td>
           <td (click)="editReservation(reservation)">{{reservation.tableType}}</td>
-          <td (click)="editReservation(reservation)">{{reservation.bookingStart}}</td>
-          <td (click)="editReservation(reservation)">{{reservation.bookingEnd}}</td>
+          
+          <td (click)="editReservation(reservation)"> <div ng-if="reservation.bookingStart != null"> {{reservation.bookingStart | date:'medium'}} </div></td>
+          <td (click)="editReservation(reservation)">{{reservation.bookingEnd | date:'medium'}} </td>
           <td>
             <a class="btn text-danger" (click)="deleteReservation(reservation)">X<i class="fa fa-trash fa-lg"></i></a>
           </td>

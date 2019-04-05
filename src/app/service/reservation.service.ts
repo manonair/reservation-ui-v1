@@ -25,7 +25,7 @@ export class ReservationService {
   readonly userReservations_URL: string = 'user';
   readonly getAllTables_URL = 'tables';
   readonly deleteReservation_URL = 'delete';
-  readonly login_URL = 'http://localhost:2233/login';
+  readonly login_URL = 'http://localhost:1111/api/user-service/login';
 
 
 
@@ -60,15 +60,24 @@ export class ReservationService {
     httpOptions.headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     httpOptions.headers.append('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     httpOptions.headers.append('Access-Control-Allow-Credentials', 'true');
+    httpOptions.headers.append('Access-Control-Allow-Credentials', 'true');
+
+
+  
+  }
+
+
+  private  setSecureHeader()  {
+    httpOptions.headers.append('Authorization', '*');
+    httpOptions.headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    httpOptions.headers.append('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    httpOptions.headers.append('Access-Control-Allow-Credentials', 'true');
   
   }
 
   getReservations(): Observable<Reservation[]> {
     var url = `${this.reservation_URL}/${this.allReservations_URL}`;
-    /* httpOptions.headers.append('Access-Control-Allow-Origin', '*');
-    httpOptions.headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    httpOptions.headers.append('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    httpOptions.headers.append('Access-Control-Allow-Credentials', 'true'); */
+   
     this.setRegularHeader();
     return this.http.get<Reservation[]>(url, httpOptions);
   }
@@ -77,11 +86,6 @@ export class ReservationService {
   getReservationsByUser(): Observable<Reservation[]> {
     this.userDetails = JSON.parse(localStorage.getItem('userinfo'));
     var url = `${this.reservation_URL}/${this.userReservations_URL}/${this.userDetails.id}`;
-
-    /* httpOptions.headers.append('Access-Control-Allow-Origin', '*');
-    httpOptions.headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    httpOptions.headers.append('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    httpOptions.headers.append('Access-Control-Allow-Credentials', 'true'); */
     this.setRegularHeader();
     return this.http.get<Reservation[]>(url, httpOptions);
   }
@@ -129,10 +133,15 @@ export class ReservationService {
     console.log(JSON.stringify(formData));
 
     var reqHeader = new HttpHeaders({
-      "authorization": "Basic c3ByaW5nLXNlY3VyaXR5LW9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudDpzcHJpbmctc2VjdXJpdHktb2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50LXBhc3N3b3JkMTIzNA==",
-      "content-type": "application/json;charset=UTF-8",
+      // Client secrit encoded
+      "authorization": "Basic b2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50Om9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudC1wYXNzd29yZHJ3MTIz",
+     "content-type": "application/json;charset=UTF-8",
       "No-Auth": "True",
-      "Access-Control-Allow-Origin": "http://localhost:4200/"
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true" ,
+      "Access-Control-Allow-Methods" : "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+      // "Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type, Authorization, Content-Length, X-Requested-With",
+      "Access-Control-Allow-Header": "true"
     });
   return this.http.post(this.login_URL, formData, { headers: reqHeader });
   }
