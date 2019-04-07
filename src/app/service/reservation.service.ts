@@ -18,13 +18,14 @@ var httpOptions = {
 })
 export class ReservationService {
 
-  readonly BaseURI = 'http://localhost:1111/api/user-service/';
+  readonly BaseURI = 'http://localhost:1111/api/user-service';
   readonly reservation_URL: string = 'http://localhost:1111/api/roster-microservice/reservation';
 
   readonly allReservations_URL: string = 'all';
   readonly userReservations_URL: string = 'user';
   readonly getAllTables_URL = 'tables';
   readonly deleteReservation_URL = 'delete';
+  readonly userRegistratuin_URL = 'user/create';
   readonly login_URL = 'http://localhost:1111/api/user-service/login';
 
 
@@ -33,6 +34,7 @@ export class ReservationService {
   userDetails: UserInfo;
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
+  
 
   formModel = this.fb.group({
     UserName: ['', Validators.required],
@@ -45,57 +47,68 @@ export class ReservationService {
 
   });
 
-
-  getAvailableTables(): Observable<Reservation[]> {
-    var url = `${this.reservation_URL}/${this.getAllTables_URL}`;
-    this.setRegularHeader();
-    console.log('URL: ' + url);
-    return this.http.get<Reservation[]>(url, httpOptions);
-
+  private getHeaderWithToken() {
+    return new HttpHeaders({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+      "Access-Control-Allow-Headers": "X-Requested-With,content-type",
+      "Access-Control-Allow-Credentials": "true",
+      "Authorization": "Bearer " + localStorage.getItem("token")
+    });
   }
-
-
-  private  setRegularHeader()  {
-    httpOptions.headers.append('Access-Control-Allow-Origin', '*');
-    httpOptions.headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    httpOptions.headers.append('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    httpOptions.headers.append('Access-Control-Allow-Credentials', 'true');
-    httpOptions.headers.append('Access-Control-Allow-Credentials', 'true');
-
-
   
+  private getSecureHeader() {
+    return new HttpHeaders({
+      // Client secrit encoded
+      "authorization": "Basic b2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50Om9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudC1wYXNzd29yZHJ3MTIz",
+      "content-type": "application/json;charset=UTF-8",
+      "No-Auth": "True",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+      "Access-Control-Allow-Header": "true"
+    });
   }
-
 
   private  setSecureHeader()  {
     httpOptions.headers.append('Authorization', '*');
     httpOptions.headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     httpOptions.headers.append('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     httpOptions.headers.append('Access-Control-Allow-Credentials', 'true');
-  
   }
+
+  getAvailableTables(): Observable<Reservation[]> {
+    var url = `${this.reservation_URL}/${this.getAllTables_URL}`;
+    var reqHeader =  this.getHeaderWithToken();
+    console.log('URL: ' + url);
+    return this.http.get<Reservation[]>(url, { headers: reqHeader });
+
+  }
+
 
   getReservations(): Observable<Reservation[]> {
     var url = `${this.reservation_URL}/${this.allReservations_URL}`;
-   
-    this.setRegularHeader();
-    return this.http.get<Reservation[]>(url, httpOptions);
+    var reqHeader =  this.getHeaderWithToken();
+    return this.http.get<Reservation[]>(url, { headers: reqHeader });
   }
 
 
   getReservationsByUser(): Observable<Reservation[]> {
     this.userDetails = JSON.parse(localStorage.getItem('userinfo'));
     var url = `${this.reservation_URL}/${this.userReservations_URL}/${this.userDetails.id}`;
-    this.setRegularHeader();
-    return this.http.get<Reservation[]>(url, httpOptions);
+   // this.setRegularHeader();
+    var reqHeader = this.getHeaderWithToken();
+    return this.http.get<Reservation[]>(url, { headers: reqHeader });
   }
 
 
+ 
+
   deleteReservation(reservation: Reservation): Observable<any> {
     var url = `${this.reservation_URL}/${this.deleteReservation_URL}/${reservation.tableReservationId}`;
-    this.setRegularHeader();
+    var reqHeader = this.getHeaderWithToken();
     console.log('URL: ' + url);
-    return this.http.post<Reservation>(url, httpOptions);
+    return this.http.post<Reservation>(url, { headers: reqHeader });
 
   }
 
@@ -105,7 +118,8 @@ export class ReservationService {
   addReservation(reservation: Reservation): Observable<Reservation> {
     const url = `${this.reservation_URL}/add`;
     console.log('Add URL: ' + url);
-    return this.http.post<Reservation>(url, reservation, httpOptions);
+    var reqHeader = this.getHeaderWithToken();
+    return this.http.post<Reservation>(url, reservation, { headers: reqHeader });
 
   }
 
@@ -119,32 +133,31 @@ export class ReservationService {
     }
   }
 
-  register() {
-    var body = {
-      UserName: this.formModel.value.UserName,
-      Email: this.formModel.value.Email,
-      FullName: this.formModel.value.FullName,
-      Password: this.formModel.value.Passwords.Password
+  register(userRegistrationForm) {
+  alert('Here');
+     
+    var user = {
+      username: userRegistrationForm.value.username,
+      email: userRegistrationForm.value.email,
+      lastName: userRegistrationForm.value.lastName,
+      firstName: userRegistrationForm.value.firstName,
+      password: this.formModel.value.password
     };
-    return this.http.post(this.BaseURI + '/ApplicationUser/Register', body);
+    var url = `${this.BaseURI}/${this.userRegistratuin_URL}`;
+    var reqHeader = this.getSecureHeader();
+    console.log('URL: ' + url);
+    return this.http.post(url, user, { headers: reqHeader });
+     
   }
 
   login(formData) {
     console.log(JSON.stringify(formData));
 
-    var reqHeader = new HttpHeaders({
-      // Client secrit encoded
-      "authorization": "Basic b2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50Om9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudC1wYXNzd29yZHJ3MTIz",
-     "content-type": "application/json;charset=UTF-8",
-      "No-Auth": "True",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": "true" ,
-      "Access-Control-Allow-Methods" : "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-      // "Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type, Authorization, Content-Length, X-Requested-With",
-      "Access-Control-Allow-Header": "true"
-    });
+    var reqHeader = this.getSecureHeader();
   return this.http.post(this.login_URL, formData, { headers: reqHeader });
   }
+
+ 
 
   getUserProfile() {
     return this.http.get(this.BaseURI + '/UserProfile');

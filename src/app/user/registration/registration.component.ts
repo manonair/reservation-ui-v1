@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationService } from 'src/app/service/reservation.service';
 import { ToastrService } from 'ngx-toastr';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-registration',
@@ -16,8 +17,21 @@ export class RegistrationComponent implements OnInit {
   }
 
 
-  onSubmit() {
-    this.service.register().subscribe(
+  user={
+    username: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    email: '',
+    phone: '',
+    zipCode: ''
+}
+
+  onSubmit(userRegistrationForm :NgForm) {
+     
+
+    this.service.register(userRegistrationForm).subscribe(
       (res: any) => {
         if (res.succeeded) {
           this.service.formModel.reset();
