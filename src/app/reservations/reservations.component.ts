@@ -16,7 +16,7 @@ export class ReservationsComponent implements OnInit {
   reservations: Reservation[];
   selectedReservation: Reservation;
 
-
+DEFAULT_DATE:string= '2001-01-01T00:00:00';
   @Input() reservation: Reservation;
 
   constructor(private reservationService: ReservationService, private router: Router) { }
@@ -25,8 +25,9 @@ export class ReservationsComponent implements OnInit {
   ngOnInit() {
     this.reservationService.getReservationsByUser().subscribe(reservations => {
       reservations.forEach(res => {
-        res.bookingStart = isNull(res.bookingStart) ? new Date() : (isDate(res.bookingStart) ? moment(Number(res.bookingStart)).toDate() : new Date());
-        res.bookingEnd = isNull(res.bookingEnd) ? new Date() : (isDate(res.bookingEnd) ? moment(Number(res.bookingEnd)).toDate() : new Date());
+        
+        res.bookingStart = isNull(res.bookingStart) ? new Date(this.DEFAULT_DATE) :  new Date(res.bookingStart) ;
+        res.bookingEnd = isNull(res.bookingEnd) ? new Date(this.DEFAULT_DATE) :  new Date(res.bookingEnd) ;
       });
       this.reservations = reservations;
     });
@@ -52,8 +53,8 @@ export class ReservationsComponent implements OnInit {
     console.log('Get Available Tables to Book !');
     this.reservationService.getAvailableTables().subscribe(reservations => {
       reservations.forEach(res => {
-        res.bookingStart = isNull(res.bookingStart) ? new Date() : (isDate(res.bookingStart) ? moment(Number(res.bookingStart)).toDate() : new Date());
-        res.bookingEnd = isNull(res.bookingEnd) ? new Date() : (isDate(res.bookingEnd) ? moment(Number(res.bookingEnd)).toDate() : new Date());
+        res.bookingStart = isNull(res.bookingStart) ? new Date(this.DEFAULT_DATE) :  new Date(res.bookingStart) ;
+        res.bookingEnd = isNull(res.bookingEnd) ? new Date(this.DEFAULT_DATE) :  new Date(res.bookingEnd) ;
       });
       this.reservations = reservations;
     });
@@ -62,6 +63,7 @@ export class ReservationsComponent implements OnInit {
 
   addReservation(reservation: Reservation) {
     console.log('Add  Reservation Service CAll  !');
+    
     this.reservationService.addReservation(reservation)
       .subscribe(
         reservation => this.reservations.push(reservation)
@@ -73,9 +75,9 @@ export class ReservationsComponent implements OnInit {
   editReservation(reservation: Reservation) {
     console.log('Edit Reservation ! @ Edit Page');
 
-    reservation.bookingStart = isNull(reservation.bookingStart) ? new Date() : (isDate(reservation.bookingStart) ? moment(Number(reservation.bookingStart)).toDate() : new Date());
-    reservation.bookingEnd = isNull(reservation.bookingEnd) ? new Date() : (isDate(reservation.bookingEnd) ? moment(Number(reservation.bookingEnd)).toDate() : new Date());
-    this.selectedReservation = reservation;
+    reservation.bookingStart = isNull(reservation.bookingStart) ? new Date(this.DEFAULT_DATE) :  new Date(reservation.bookingStart) ;
+    reservation.bookingEnd = isNull(reservation.bookingEnd) ? new Date(this.DEFAULT_DATE) :  new Date(reservation.bookingEnd) ;
+     this.selectedReservation = reservation;
   }
 
 

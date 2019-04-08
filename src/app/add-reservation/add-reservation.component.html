@@ -73,6 +73,9 @@
           <dl-date-time-picker startView="day" maxView="year" minView="minute" minuteStep="30"
             [(ngModel)]="reservation.bookingEnd" name="reservation.bookingEnd" data-date-format="YYYY-MM-DD hh:ii">
           </dl-date-time-picker>
+
+          <p>Selected Date: {{reservation.bookingEnd}}</p>
+
         </div>
       </div>
 

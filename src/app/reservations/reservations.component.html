@@ -25,7 +25,9 @@
           <td (click)="editReservation(reservation)">{{reservation.status}}</td>
           <td (click)="editReservation(reservation)">{{reservation.tableType}}</td>
           
-          <td (click)="editReservation(reservation)"> <div ng-if="reservation.bookingStart != null"> {{reservation.bookingStart | date:'medium'}} </div></td>
+          <td (click)="editReservation(reservation)">        
+            {{reservation.bookingStart | date:'medium'}}  
+          </td>
           <td (click)="editReservation(reservation)">{{reservation.bookingEnd | date:'medium'}} </td>
           <td>
             <a class="btn text-danger" (click)="deleteReservation(reservation)">X<i class="fa fa-trash fa-lg"></i></a>

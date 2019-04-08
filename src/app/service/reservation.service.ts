@@ -5,6 +5,7 @@ import { UserInfo } from '../auth/UserInfo';
 import { Observable } from 'rxjs';
 import { Reservation } from '../model/Reservation';
 import { HttpParamsOptions } from '@angular/common/http/src/params';
+import { isDate } from 'moment';
 
 var httpOptions = {
   headers: new HttpHeaders({
@@ -117,6 +118,7 @@ export class ReservationService {
 
   addReservation(reservation: Reservation): Observable<Reservation> {
     const url = `${this.reservation_URL}/add`;
+   
     console.log('Add URL: ' + url);
     var reqHeader = this.getHeaderWithToken();
     return this.http.post<Reservation>(url, reservation, { headers: reqHeader });
