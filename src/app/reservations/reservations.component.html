@@ -25,13 +25,21 @@
           <td (click)="editReservation(reservation)">{{reservation.status}}</td>
           <td (click)="editReservation(reservation)">{{reservation.tableType}}</td>
           
-          <td (click)="editReservation(reservation)">        
-            {{reservation.bookingStart | date:'medium'}}  
+          <td (click)="editReservation(reservation)"> 
+   
+          <div *ngIf="reservation.bookingStart.getTime()!= 978328800000">
+             {{reservation.bookingStart | date:'medium'}} 
+            </div>
           </td>
-          <td (click)="editReservation(reservation)">{{reservation.bookingEnd | date:'medium'}} </td>
+          <td (click)="editReservation(reservation)">
+              <div *ngIf="reservation.bookingEnd.getTime()!= 978328800000">
+            {{reservation.bookingEnd | date:'medium'}} 
+          </div>
+          </td>
           <td>
             <a class="btn text-danger" (click)="deleteReservation(reservation)">X<i class="fa fa-trash fa-lg"></i></a>
           </td>
+          
         </tr>
       </tbody>
      

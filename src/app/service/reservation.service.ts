@@ -49,12 +49,14 @@ export class ReservationService {
   });
 
   private getHeaderWithToken() {
+    
     return new HttpHeaders({
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-      "Access-Control-Allow-Headers": "X-Requested-With,content-type",
-      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Origin": "http://localhost:4200",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE",
+      "Access-Control-Allow-Headers": "Origin, x-requested-with, Authorization, content-type, Access-Control-Allow-Origin",
+      //"Access-Control-Allow-Credentials": "true",
       "Authorization": "Bearer " + localStorage.getItem("token")
+      
     });
   }
   
@@ -63,21 +65,15 @@ export class ReservationService {
       // Client secrit encoded
       "authorization": "Basic b2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50Om9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudC1wYXNzd29yZHJ3MTIz",
       "content-type": "application/json;charset=UTF-8",
-      "No-Auth": "True",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-      "Access-Control-Allow-Header": "true"
+     // "No-Auth": "True",
+      //"Access-Control-Allow-Origin": "*",
+      ///"Access-Control-Allow-Credentials": "true",
+      //"Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE",
+      //"Access-Control-Allow-Headers": "Origin, x-requested-with, Authorization, content-type, Access-Control-Allow-Origin"
+     
     });
   }
-
-  private  setSecureHeader()  {
-    httpOptions.headers.append('Authorization', '*');
-    httpOptions.headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    httpOptions.headers.append('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    httpOptions.headers.append('Access-Control-Allow-Credentials', 'true');
-  }
-
+  
   getAvailableTables(): Observable<Reservation[]> {
     var url = `${this.reservation_URL}/${this.getAllTables_URL}`;
     var reqHeader =  this.getHeaderWithToken();
@@ -97,8 +93,11 @@ export class ReservationService {
   getReservationsByUser(): Observable<Reservation[]> {
     this.userDetails = JSON.parse(localStorage.getItem('userinfo'));
     var url = `${this.reservation_URL}/${this.userReservations_URL}/${this.userDetails.id}`;
-   // this.setRegularHeader();
-    var reqHeader = this.getHeaderWithToken();
+    
+   var reqHeader = this.getHeaderWithToken();
+
+     
+
     return this.http.get<Reservation[]>(url, { headers: reqHeader });
   }
 
